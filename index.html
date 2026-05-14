@@ -453,6 +453,64 @@
         @media (max-width: 460px) {
             .hero h1 { font-size: 28px; }
         }
+
+        /* ── MODAL ─────────────────────────────────────── */
+        .modal-overlay {
+            display: none;
+            position: fixed; inset: 0; z-index: 200;
+            background: rgba(6,15,30,.72);
+            backdrop-filter: blur(4px);
+            align-items: center; justify-content: center;
+            padding: 20px;
+        }
+        .modal-overlay.on { display: flex; }
+        .modal {
+            background: var(--navy);
+            border: 1px solid rgba(200,168,75,.25);
+            border-radius: var(--rl);
+            padding: 40px 36px;
+            width: 100%; max-width: 480px;
+            position: relative;
+            animation: modalIn .25s ease;
+        }
+        @keyframes modalIn {
+            from { opacity:0; transform: translateY(-16px) scale(.97); }
+            to   { opacity:1; transform: translateY(0) scale(1); }
+        }
+        .modal-close {
+            position: absolute; top: 14px; right: 14px;
+            width: 32px; height: 32px; border-radius: 50%;
+            background: rgba(255,255,255,.07); border: none; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            color: rgba(255,255,255,.5);
+            transition: background var(--t), color var(--t);
+        }
+        .modal-close:hover { background: rgba(200,168,75,.15); color: var(--gold); }
+        .modal h3 {
+            font-family: var(--font-d); font-size: 22px;
+            color: var(--white); margin-bottom: 6px;
+        }
+        .modal > p {
+            font-size: 13.5px; color: rgba(255,255,255,.45); margin-bottom: 24px;
+        }
+        .modal .f-grp label { color: rgba(255,255,255,.55); }
+        .modal .f-grp input, .modal .f-grp textarea {
+            background: rgba(255,255,255,.07);
+            border: 1px solid rgba(255,255,255,.11);
+            color: var(--white);
+        }
+        .modal .f-grp input::placeholder { color: rgba(255,255,255,.28); }
+        .modal .f-grp input:focus { border-color: var(--gold); }
+        .modal .f-chk label { color: rgba(255,255,255,.4); }
+        .modal-ok { display:none; text-align:center; padding: 16px 0 8px; }
+        .modal-ok-ico {
+            width: 58px; height: 58px; border-radius: 50%;
+            background: rgba(200,168,75,.1);
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 14px;
+        }
+        .modal-ok h3 { font-size: 20px; margin-bottom: 8px; }
+        .modal-ok p { font-size: 14px; color: rgba(255,255,255,.45); }
     </style>
 </head>
 <body>
@@ -482,7 +540,7 @@
             <a href="tel:+79378407170">+7 937 840-71-70</a>
             <a href="tel:+79638952535">+7 963 895-25-35</a>
         </div>
-        <button class="btn-hdr" onclick="scrollTo('apply')">Оставить заявку</button>
+        <button class="btn-hdr" onclick="openModal()">Оставить заявку</button>
         <button class="burger" id="burger" aria-label="Меню">
             <span></span><span></span><span></span>
         </button>
@@ -513,8 +571,8 @@
             <h1>Банковская гарантия <em>под ключ</em> — сопровождаем на всех этапах</h1>
             <p class="hero-sub">Берём на себя подбор банка, подготовку документов и подачу заявки. Вы получаете гарантию — без лишних хлопот.</p>
             <div class="hero-ctas">
-                <button class="btn-pri" onclick="scrollTo('apply')">Получить консультацию</button>
-                <button class="btn-out" onclick="scrollTo('services')">Узнать подробнее</button>
+                <button class="btn-pri" onclick="goTo('apply')">Получить консультацию</button>
+                <button class="btn-out" onclick="goTo('services')">Узнать подробнее</button>
             </div>
             <div class="hero-phones">
                 <a href="tel:+79378407170">
@@ -930,6 +988,38 @@
     </div>
 </section>
 
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay">
+    <div class="modal">
+        <button class="modal-close" onclick="closeModal()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+        </button>
+        <div id="modal-form">
+            <h3>Оставить заявку</h3>
+            <p>Ответим в течение 15 минут в рабочее время</p>
+            <div class="f-grp"><label>Ваше имя</label><input type="text" placeholder="Иван Иванов" id="m-name"></div>
+            <div class="f-grp"><label>Телефон</label><input type="tel" placeholder="+7 ___ ___-__-__" id="m-phone"></div>
+            <div class="f-grp"><label>Email (необязательно)</label><input type="email" placeholder="ivan@company.ru" id="m-email"></div>
+            <div class="f-chk">
+                <input type="checkbox" id="m-agree">
+                <label for="m-agree">Согласен на <a href="#">обработку персональных данных</a></label>
+            </div>
+            <button class="btn-pri" style="width:100%;padding:14px" onclick="modalSubmit()">Отправить заявку</button>
+        </div>
+        <div class="modal-ok" id="modal-ok">
+            <div class="modal-ok-ico">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"/>
+                </svg>
+            </div>
+            <h3 style="color:var(--white)">Заявка отправлена!</h3>
+            <p>Свяжемся с вами в течение 15 минут</p>
+        </div>
+    </div>
+</div>
+
 <script>
     // sticky header
     const hdr = document.getElementById('hdr');
@@ -948,8 +1038,31 @@
     }));
 
     // smooth scroll helper
-    function scrollTo(id) {
+    function goTo(id) {
         document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // modal
+    const overlay = document.getElementById('modal-overlay');
+    function openModal() {
+        overlay.classList.add('on');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeModal() {
+        overlay.classList.remove('on');
+        document.body.style.overflow = '';
+    }
+    overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+    function modalSubmit() {
+        const n = document.getElementById('m-name').value.trim();
+        const p = document.getElementById('m-phone').value.trim();
+        const a = document.getElementById('m-agree').checked;
+        if (!n || !p) { alert('Пожалуйста, заполните имя и телефон'); return; }
+        if (!a) { alert('Необходимо дать согласие на обработку персональных данных'); return; }
+        document.getElementById('modal-form').style.display = 'none';
+        document.getElementById('modal-ok').style.display = 'block';
     }
 
     // FAQ accordion
