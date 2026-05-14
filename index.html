@@ -463,7 +463,6 @@
             align-items: center; justify-content: center;
             padding: 20px;
         }
-        .modal-overlay.on { display: flex; }
         .modal {
             background: var(--navy);
             border: 1px solid rgba(200,168,75,.25);
@@ -1022,80 +1021,85 @@
 
 <script>
     // sticky header
-    const hdr = document.getElementById('hdr');
-    addEventListener('scroll', () => hdr.classList.toggle('scrolled', scrollY > 20));
+    window.addEventListener('scroll', function() {
+        document.getElementById('hdr').classList.toggle('scrolled', window.scrollY > 20);
+    });
 
     // hamburger
-    const burger = document.getElementById('burger');
-    const mob = document.getElementById('mob-menu');
-    burger.addEventListener('click', () => {
-        burger.classList.toggle('on');
-        mob.classList.toggle('on');
+    document.getElementById('burger').addEventListener('click', function() {
+        this.classList.toggle('on');
+        document.getElementById('mob-menu').classList.toggle('on');
     });
-    document.querySelectorAll('.mn').forEach(a => a.addEventListener('click', () => {
-        burger.classList.remove('on');
-        mob.classList.remove('on');
-    }));
+    document.querySelectorAll('.mn').forEach(function(a) {
+        a.addEventListener('click', function() {
+            document.getElementById('burger').classList.remove('on');
+            document.getElementById('mob-menu').classList.remove('on');
+        });
+    });
 
-    // smooth scroll helper
-    function goTo(id) {
-        document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
-    }
+    // smooth scroll
+    window.goTo = function(id) {
+        var el = document.getElementById(id);
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+    };
 
     // modal
-    const overlay = document.getElementById('modal-overlay');
-    function openModal() {
-        overlay.classList.add('on');
+    window.openModal = function() {
+        document.getElementById('modal-overlay').style.display = 'flex';
         document.body.style.overflow = 'hidden';
-    }
-    function closeModal() {
-        overlay.classList.remove('on');
+    };
+    window.closeModal = function() {
+        document.getElementById('modal-overlay').style.display = 'none';
         document.body.style.overflow = '';
-    }
-    overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+    };
+    document.getElementById('modal-overlay').addEventListener('click', function(e) {
+        if (e.target === this) window.closeModal();
+    });
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') window.closeModal();
+    });
 
-    function modalSubmit() {
-        const n = document.getElementById('m-name').value.trim();
-        const p = document.getElementById('m-phone').value.trim();
-        const a = document.getElementById('m-agree').checked;
+    window.modalSubmit = function() {
+        var n = document.getElementById('m-name').value.trim();
+        var p = document.getElementById('m-phone').value.trim();
+        var a = document.getElementById('m-agree').checked;
         if (!n || !p) { alert('Пожалуйста, заполните имя и телефон'); return; }
         if (!a) { alert('Необходимо дать согласие на обработку персональных данных'); return; }
         document.getElementById('modal-form').style.display = 'none';
         document.getElementById('modal-ok').style.display = 'block';
-    }
+    };
 
     // FAQ accordion
-    document.querySelectorAll('.faq-q').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const item = btn.parentElement;
-            const open = item.classList.contains('open');
-            document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
-            if (!open) item.classList.add('open');
+    document.querySelectorAll('.faq-q').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            var item = btn.parentElement;
+            var isOpen = item.classList.contains('open');
+            document.querySelectorAll('.faq-item').forEach(function(i) { i.classList.remove('open'); });
+            if (!isOpen) item.classList.add('open');
         });
     });
 
     // IntersectionObserver fade-up
-    const obs = new IntersectionObserver(entries => {
-        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); });
+    var obs = new IntersectionObserver(function(entries) {
+        entries.forEach(function(e) { if (e.isIntersecting) e.target.classList.add('vis'); });
     }, { threshold: 0.1 });
-    document.querySelectorAll('.fu').forEach(el => obs.observe(el));
+    document.querySelectorAll('.fu').forEach(function(el) { obs.observe(el); });
 
     // hero mini-form
-    function heroSubmit() {
-        const n = document.getElementById('h-name').value.trim();
-        const p = document.getElementById('h-phone').value.trim();
+    window.heroSubmit = function() {
+        var n = document.getElementById('h-name').value.trim();
+        var p = document.getElementById('h-phone').value.trim();
         if (!n || !p) { alert('Пожалуйста, заполните имя и телефон'); return; }
         alert('Спасибо, ' + n + '! Свяжемся с вами в течение 15 минут.');
         document.getElementById('h-name').value = '';
         document.getElementById('h-phone').value = '';
-    }
+    };
 
     // main form
-    function mainSubmit() {
-        const n = document.getElementById('f-name').value.trim();
-        const p = document.getElementById('f-phone').value.trim();
-        const a = document.getElementById('f-agree').checked;
+    window.mainSubmit = function() {
+        var n = document.getElementById('f-name').value.trim();
+        var p = document.getElementById('f-phone').value.trim();
+        var a = document.getElementById('f-agree').checked;
         if (!n || !p) { alert('Пожалуйста, заполните имя и телефон'); return; }
         if (!a) { alert('Необходимо дать согласие на обработку персональных данных'); return; }
         document.getElementById('main-form').style.display = 'none';
