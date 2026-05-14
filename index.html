@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Гарант Сити — Банковская гарантия под ключ</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --navy:        #0D2240;
+            --navy-light:  #1A3460;
+            --navy-dark:   #081628;
+            --gold:        #C8A84B;
+            --gold-light:  #E8C96A;
+            --gold-pale:   #F5EDD8;
+            --white:       #FFFFFF;
+            --gray-100:    #F7F9FB;
+            --gray-200:    #ECEEF3;
+            --gray-400:    #8A93A8;
+            --gray-700:    #3D4A5C;
+            --text:        #1C2535;
+            --font-d:      'Playfair Display', Georgia, serif;
+            --font-b:      'Manrope', sans-serif;
+            --r:           8px;
+            --rl:          16px;
+            --sh-sm:       0 2px 8px rgba(13,34,64,.08);
+            --sh-md:       0 8px 28px rgba(13,34,64,.13);
+            --t:           0.24s ease;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body { font-family: var(--font-b); color: var(--text); background: var(--white); line-height: 1.65; overflow-x: hidden; }
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+
+        /* ── HEADER ─────────────────────────────────────── */
+        .hdr {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            background: var(--navy);
+            border-bottom: 1px solid rgba(200,168,75,.18);
+            transition: box-shadow var(--t);
+        }
+        .hdr.scrolled { box-shadow: 0 4px 32px rgba(0,0,0,.3); }
+        .hdr-in {
+            max-width: 1280px; margin: 0 auto; padding: 0 24px;
+            height: 70px; display: flex; align-items: center; gap: 24px;
+        }
+
+        /* logo */
+        .logo { display: flex; align-items: center; gap: 11px; flex-shrink: 0; }
+        .logo-txt { font-family: var(--font-d); font-size: 18px; font-weight: 700; color: var(--white); line-height: 1.15; }
+        .logo-sub { font-size: 10px; color: var(--gold); font-weight: 600; letter-spacing: .09em; text-transform: uppercase; }
+
+        /* nav */
+        .nav { display: flex; align-items: center; gap: 2px; margin-left: auto; }
+        .nav a {
+            font-size: 13.5px; font-weight: 500; color: rgba(255,255,255,.72);
+            padding: 7px 11px; border-radius: var(--r);
+            transition: color var(--t);
+            white-space: nowrap;
+        }
+        .nav a:hover { color: var(--gold); }
+
+        .hdr-phones { display: flex; flex-direction: column; gap: 2px; flex-shrink: 0; }
+        .hdr-phones a { font-size: 12.5px; font-weight: 600; color: var(--white); transition: color var(--t); }
+        .hdr-phones a:hover { color: var(--gold); }
+
+        .btn-hdr {
+            background: var(--gold); color: var(--navy);
+            font-family: var(--font-b); font-size: 13px; font-weight: 700;
+            padding: 9px 18px; border-radius: var(--r); border: none; cursor: pointer;
+            transition: background var(--t), transform var(--t);
+            white-space: nowrap; flex-shrink: 0;
+        }
+        .btn-hdr:hover { background: var(--gold-light); transform: translateY(-1px); }
+
+        /* hamburger */
+        .burger {
+            display: none; flex-direction: column; gap: 5px;
+            cursor: pointer; padding: 8px; margin-left: auto;
+            background: none; border: none;
+        }
+        .burger span { display: block; width: 22px; height: 2px; background: var(--white); border-radius: 2px; transition: var(--t); }
+        .burger.on span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .burger.on span:nth-child(2) { opacity: 0; }
+        .burger.on span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+        .mob-menu {
+            display: none; position: fixed; top: 70px; left: 0; right: 0;
+            background: var(--navy-dark); padding: 12px 24px 24px; z-index: 99;
+            border-top: 1px solid rgba(200,168,75,.15);
+        }
+        .mob-menu.on { display: block; }
+        .mob-menu a {
+            display: block; font-size: 15px; font-weight: 500;
+            color: rgba(255,255,255,.82); padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,.06);
+        }
+        .mob-menu .mob-phones { margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(200,168,75,.2); }
+        .mob-menu .mob-phones a { border: none; font-size: 18px; color: var(--gold); font-weight: 700; }
+
+        /* ── HERO ─────────────────────────────────────────── */
+        .hero {
+            background: var(--navy-dark);
+            padding: 140px 24px 88px;
+            position: relative; overflow: hidden;
+            min-height: 100vh; display: flex; align-items: center;
+        }
+        .hero-bg {
+            position: absolute; inset: 0;
+            background: linear-gradient(135deg, #060f1e 0%, #0D2240 55%, #122b52 100%);
+        }
+        .hero-grid {
+            position: absolute; inset: 0; opacity: .05;
+            background-image:
+                linear-gradient(var(--gold) 1px, transparent 1px),
+                linear-gradient(90deg, var(--gold) 1px, transparent 1px);
+            background-size: 56px 56px;
+        }
+        .hero-glow {
+            position: absolute; right: -5%; top: 5%;
+            width: 700px; height: 700px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(200,168,75,.07) 0%, transparent 65%);
+            pointer-events: none;
+        }
+        .hero-in {
+            max-width: 1280px; margin: 0 auto; width: 100%;
+            position: relative; z-index: 1;
+            display: grid; grid-template-columns: 1fr 400px; gap: 72px; align-items: center;
+        }
+        .hero-eyebrow {
+            display: inline-flex; align-items: center; gap: 9px;
+            font-size: 11.5px; font-weight: 700; letter-spacing: .13em;
+            text-transform: uppercase; color: var(--gold); margin-bottom: 22px;
+        }
+        .hero-eyebrow::before { content:''; display:block; width:22px; height:2px; background:var(--gold); }
+        .hero h1 {
+            font-family: var(--font-d);
+            font-size: clamp(34px, 4.8vw, 62px);
+            font-weight: 700; color: var(--white); line-height: 1.14;
+            margin-bottom: 24px;
+        }
+        .hero h1 em { font-style: normal; color: var(--gold); }
+        .hero-sub { font-size: 17.5px; color: rgba(255,255,255,.6); line-height: 1.72; margin-bottom: 40px; max-width: 520px; }
+        .hero-ctas { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 48px; }
+
+        .btn-pri {
+            background: var(--gold); color: var(--navy);
+            font-family: var(--font-b); font-size: 14.5px; font-weight: 700;
+            padding: 14px 30px; border-radius: var(--r); border: none; cursor: pointer;
+            transition: background var(--t), transform var(--t), box-shadow var(--t);
+            letter-spacing: .02em;
+        }
+        .btn-pri:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(200,168,75,.35); }
+
+        .btn-out {
+            background: transparent; color: var(--white);
+            font-family: var(--font-b); font-size: 14.5px; font-weight: 600;
+            padding: 13px 30px; border-radius: var(--r);
+            border: 1.5px solid rgba(255,255,255,.28); cursor: pointer;
+            transition: border-color var(--t), color var(--t);
+        }
+        .btn-out:hover { border-color: var(--gold); color: var(--gold); }
+
+        .hero-phones { display: flex; gap: 28px; flex-wrap: wrap; }
+        .hero-phones a {
+            display: flex; align-items: center; gap: 9px;
+            color: rgba(255,255,255,.78); font-size: 15.5px; font-weight: 600;
+            transition: color var(--t);
+        }
+        .hero-phones a:hover { color: var(--gold); }
+        .ph-ring {
+            width: 32px; height: 32px; border-radius: 50%;
+            border: 1.5px solid rgba(200,168,75,.4);
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        /* hero form card */
+        .hero-card {
+            background: rgba(255,255,255,.04);
+            border: 1px solid rgba(200,168,75,.2);
+            border-radius: var(--rl); padding: 32px;
+            backdrop-filter: blur(14px);
+        }
+        .hero-card h3 { font-family: var(--font-d); font-size: 21px; color: var(--white); margin-bottom: 6px; }
+        .hero-card p { font-size: 13px; color: rgba(255,255,255,.45); margin-bottom: 22px; }
+        .hero-card input {
+            width: 100%; background: rgba(255,255,255,.07);
+            border: 1px solid rgba(255,255,255,.11); border-radius: var(--r);
+            padding: 12px 15px; font-family: var(--font-b); font-size: 14px;
+            color: var(--white); margin-bottom: 11px; outline: none;
+            transition: border-color var(--t);
+        }
+        .hero-card input::placeholder { color: rgba(255,255,255,.3); }
+        .hero-card input:focus { border-color: var(--gold); }
+        .hero-card .btn-pri { width: 100%; }
+        .hero-badge {
+            display: flex; align-items: center; gap: 8px; margin-top: 14px;
+        }
+        .hero-badge span { font-size: 11.5px; color: rgba(255,255,255,.4); }
+
+        /* ── SECTION COMMONS ─────────────────────────────── */
+        section { padding: 96px 24px; }
+        .wrap { max-width: 1280px; margin: 0 auto; }
+        .s-label {
+            display: inline-flex; align-items: center; gap: 8px;
+            font-size: 11.5px; font-weight: 700; letter-spacing: .12em;
+            text-transform: uppercase; color: var(--gold); margin-bottom: 10px;
+        }
+        .s-label::before { content:''; display:block; width:18px; height:2px; background:var(--gold); }
+        h2 {
+            font-family: var(--font-d);
+            font-size: clamp(26px, 3.8vw, 42px);
+            font-weight: 700; color: var(--navy); line-height: 1.2; margin-bottom: 14px;
+        }
+        .s-desc { font-size: 16.5px; color: var(--gray-400); line-height: 1.7; max-width: 540px; }
+        .s-head { margin-bottom: 56px; }
+
+        /* fade-up */
+        .fu { opacity: 0; transform: translateY(28px); transition: opacity .55s ease, transform .55s ease; }
+        .fu.vis { opacity: 1; transform: translateY(0); }
+        .fu:nth-child(2) { transition-delay: .08s; }
+        .fu:nth-child(3) { transition-delay: .16s; }
+        .fu:nth-child(4) { transition-delay: .24s; }
+        .fu:nth-child(5) { transition-delay: .32s; }
+        .fu:nth-child(6) { transition-delay: .40s; }
+        .fu:nth-child(7) { transition-delay: .48s; }
+        .fu:nth-child(8) { transition-delay: .56s; }
+
+        /* ── GUARANTEES ───────────────────────────────────── */
+        .guar { background: var(--gray-100); }
+        .guar-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 18px; }
+        .g-card {
+            background: var(--white); border-radius: var(--rl);
+            padding: 26px 22px; box-shadow: var(--sh-sm);
+            border: 1px solid var(--gray-200);
+            position: relative; overflow: hidden;
+            transition: box-shadow var(--t), transform var(--t), border-color var(--t);
+        }
+        .g-card::after {
+            content:''; position: absolute; top:0; left:0; right:0; height:3px;
+            background: linear-gradient(90deg, var(--gold), var(--gold-light));
+            opacity: 0; transition: opacity var(--t);
+        }
+        .g-card:hover { box-shadow: var(--sh-md); transform: translateY(-4px); border-color: rgba(200,168,75,.28); }
+        .g-card:hover::after { opacity: 1; }
+        .g-ico {
+            width: 46px; height: 46px; background: var(--gold-pale);
+            border-radius: 11px; display: flex; align-items: center;
+            justify-content: center; margin-bottom: 15px;
+            color: var(--gold);
+        }
+        .g-card h3 { font-family: var(--font-d); font-size: 15.5px; font-weight: 700; color: var(--navy); margin-bottom: 7px; line-height: 1.3; }
+        .g-card p { font-size: 12.5px; color: var(--gray-400); line-height: 1.6; }
+        .g-badge {
+            display: inline-block; font-size: 10.5px; font-weight: 700;
+            color: var(--gold); background: var(--gold-pale);
+            padding: 3px 8px; border-radius: 4px; margin-top: 11px; letter-spacing: .04em;
+        }
+
+        /* ── PROCESS ──────────────────────────────────────── */
+        .proc { background: var(--white); }
+        .steps {
+            display: grid; grid-template-columns: repeat(4,1fr);
+            gap: 0; position: relative;
+        }
+        .steps::before {
+            content:''; position: absolute; top: 35px;
+            left: calc(12.5% + 20px); right: calc(12.5% + 20px); height: 2px;
+            background: linear-gradient(90deg, var(--gold), rgba(200,168,75,.25));
+        }
+        .step { text-align: center; padding: 0 16px; }
+        .step-n {
+            width: 70px; height: 70px; border-radius: 50%;
+            background: var(--navy); color: var(--gold);
+            font-family: var(--font-d); font-size: 22px; font-weight: 700;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 24px; position: relative; z-index: 1;
+            border: 4px solid var(--white);
+            box-shadow: 0 0 0 2px var(--gold);
+        }
+        .step h3 { font-family: var(--font-d); font-size: 16.5px; font-weight: 700; color: var(--navy); margin-bottom: 10px; }
+        .step p { font-size: 13.5px; color: var(--gray-400); line-height: 1.65; }
+
+        /* ── WHY ──────────────────────────────────────────── */
+        .why { background: var(--navy); padding: 96px 24px; }
+        .why-grid {
+            display: grid; grid-template-columns: repeat(2,1fr);
+            gap: 2px; background: rgba(255,255,255,.04);
+            border-radius: var(--rl); overflow: hidden;
+            border: 1px solid rgba(200,168,75,.13);
+        }
+        .why-item {
+            background: rgba(255,255,255,.02); padding: 40px;
+            transition: background var(--t);
+        }
+        .why-item:hover { background: rgba(200,168,75,.04); }
+        .why-ico {
+            width: 54px; height: 54px;
+            border: 1.5px solid rgba(200,168,75,.28); border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            margin-bottom: 18px; color: var(--gold);
+        }
+        .why-item h3 { font-family: var(--font-d); font-size: 19.5px; color: var(--white); margin-bottom: 11px; }
+        .why-item p { font-size: 14.5px; color: rgba(255,255,255,.52); line-height: 1.72; }
+
+        /* ── WHO ──────────────────────────────────────────── */
+        .who { background: var(--gray-100); }
+        .who-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 18px; }
+        .who-card {
+            background: var(--white); border-radius: var(--rl); padding: 30px;
+            display: flex; gap: 18px; align-items: flex-start;
+            border: 1px solid var(--gray-200); box-shadow: var(--sh-sm);
+            transition: box-shadow var(--t), transform var(--t);
+        }
+        .who-card:hover { box-shadow: var(--sh-md); transform: translateY(-2px); }
+        .who-ico {
+            width: 50px; height: 50px; flex-shrink: 0;
+            background: linear-gradient(135deg, var(--navy), var(--navy-light));
+            border-radius: 12px; display: flex; align-items: center;
+            justify-content: center; color: var(--gold);
+        }
+        .who-card h3 { font-family: var(--font-d); font-size: 17.5px; color: var(--navy); margin-bottom: 7px; }
+        .who-card p { font-size: 13.5px; color: var(--gray-400); line-height: 1.65; }
+
+        /* ── FAQ ──────────────────────────────────────────── */
+        .faq-sec { background: var(--white); }
+        .faq-wrap { max-width: 780px; margin: 0 auto; }
+        .faq-item { border-bottom: 1px solid var(--gray-200); }
+        .faq-item:first-child { border-top: 1px solid var(--gray-200); }
+        .faq-q {
+            width: 100%; display: flex; justify-content: space-between; align-items: center;
+            gap: 14px; padding: 22px 0; background: none; border: none; cursor: pointer;
+            text-align: left; font-family: var(--font-b); font-size: 16.5px; font-weight: 600;
+            color: var(--navy); transition: color var(--t);
+        }
+        .faq-q:hover { color: var(--gold); }
+        .faq-icon {
+            width: 30px; height: 30px; flex-shrink: 0; border-radius: 50%;
+            border: 1.5px solid var(--gray-200);
+            display: flex; align-items: center; justify-content: center;
+            transition: border-color var(--t), background var(--t), transform var(--t);
+            color: var(--gray-400);
+        }
+        .faq-item.open .faq-icon {
+            border-color: var(--gold); background: var(--gold);
+            transform: rotate(45deg); color: var(--navy);
+        }
+        .faq-a {
+            display: none; padding-bottom: 22px;
+            font-size: 14.5px; color: var(--gray-700); line-height: 1.78;
+        }
+        .faq-item.open .faq-a { display: block; }
+
+        /* ── FORM SECTION ─────────────────────────────────── */
+        .form-sec { background: var(--navy); padding: 96px 24px; }
+        .form-box {
+            max-width: 620px;
+            background: rgba(255,255,255,.04);
+            border: 1px solid rgba(200,168,75,.2);
+            border-radius: var(--rl); padding: 44px; margin-top: 44px;
+        }
+        .f-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        .f-grp { margin-bottom: 14px; }
+        .f-grp label { display: block; font-size: 12.5px; font-weight: 600; color: rgba(255,255,255,.55); margin-bottom: 7px; letter-spacing: .04em; }
+        .f-grp input, .f-grp textarea {
+            width: 100%; background: rgba(255,255,255,.06);
+            border: 1px solid rgba(255,255,255,.1); border-radius: var(--r);
+            padding: 13px 15px; font-family: var(--font-b); font-size: 14.5px;
+            color: var(--white); outline: none; transition: border-color var(--t);
+        }
+        .f-grp input::placeholder, .f-grp textarea::placeholder { color: rgba(255,255,255,.25); }
+        .f-grp input:focus, .f-grp textarea:focus { border-color: var(--gold); }
+        .f-grp textarea { min-height: 96px; resize: vertical; }
+        .f-chk { display: flex; align-items: flex-start; gap: 10px; margin: 18px 0 22px; }
+        .f-chk input[type="checkbox"] { width: 17px; height: 17px; min-width: 17px; accent-color: var(--gold); margin-top: 2px; cursor: pointer; }
+        .f-chk label { font-size: 12.5px; color: rgba(255,255,255,.42); line-height: 1.55; }
+        .f-chk label a { color: var(--gold); text-decoration: underline; }
+
+        .form-ok { display: none; text-align: center; padding: 28px 0; }
+        .form-ok-ico {
+            width: 62px; height: 62px; border-radius: 50%;
+            background: rgba(200,168,75,.1);
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 14px;
+        }
+        .form-ok h3 { font-family: var(--font-d); font-size: 22px; color: var(--white); margin-bottom: 8px; }
+        .form-ok p { font-size: 14.5px; color: rgba(255,255,255,.48); }
+
+        /* ── CONTACTS / FOOTER ────────────────────────────── */
+        .contacts-sec { background: var(--navy-dark); padding: 80px 24px 0; }
+        .contacts-in {
+            display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 48px;
+            padding-bottom: 60px;
+            border-bottom: 1px solid rgba(255,255,255,.06);
+        }
+        .c-col h4 {
+            font-family: var(--font-b); font-size: 11px; font-weight: 700;
+            color: rgba(255,255,255,.35); letter-spacing: .1em;
+            text-transform: uppercase; margin-bottom: 18px;
+        }
+        .c-item { display: flex; align-items: center; gap: 11px; margin-bottom: 14px; }
+        .c-ico {
+            width: 34px; height: 34px; flex-shrink: 0;
+            background: rgba(200,168,75,.09); border-radius: 8px;
+            display: flex; align-items: center; justify-content: center; color: var(--gold);
+        }
+        .c-item a, .c-item span { font-size: 15px; font-weight: 600; color: var(--white); transition: color var(--t); }
+        .c-item a:hover { color: var(--gold); }
+        .c-item .sm { font-size: 13px; }
+
+        .foot-logo { display: flex; align-items: center; gap: 11px; margin-bottom: 14px; }
+        .foot-logo .logo-txt { font-size: 20px; }
+        .foot-tag { font-size: 13.5px; color: rgba(255,255,255,.38); line-height: 1.65; max-width: 260px; }
+
+        .foot-btm {
+            padding: 18px 0;
+            display: flex; justify-content: space-between; align-items: center;
+            gap: 14px; flex-wrap: wrap;
+        }
+        .foot-btm p, .foot-btm a { font-size: 12.5px; color: rgba(255,255,255,.3); transition: color var(--t); }
+        .foot-btm a:hover { color: var(--gold); }
+
+        /* ── RESPONSIVE ───────────────────────────────────── */
+        @media (max-width: 1100px) {
+            .guar-grid { grid-template-columns: repeat(2,1fr); }
+        }
+        @media (max-width: 880px) {
+            .hero-in { grid-template-columns: 1fr; }
+            .hero-card { max-width: 480px; }
+            .steps { grid-template-columns: 1fr; gap: 36px; }
+            .steps::before { display: none; }
+            .step { text-align: left; display: flex; gap: 18px; align-items: flex-start; }
+            .step-n { margin: 0; flex-shrink: 0; }
+            .why-grid { grid-template-columns: 1fr; }
+            .contacts-in { grid-template-columns: 1fr; gap: 32px; }
+        }
+        @media (max-width: 768px) {
+            .nav, .hdr-phones, .btn-hdr { display: none; }
+            .burger { display: flex; }
+            section { padding: 64px 20px; }
+            .hero { padding: 100px 20px 60px; min-height: auto; }
+            .hero-ctas { flex-direction: column; align-items: flex-start; }
+            .hero-phones { flex-direction: column; }
+            .guar-grid { grid-template-columns: 1fr; }
+            .who-grid { grid-template-columns: 1fr; }
+            .f-row { grid-template-columns: 1fr; }
+            .form-box { padding: 24px 18px; }
+        }
+        @media (max-width: 460px) {
+            .hero h1 { font-size: 28px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="hdr" id="hdr">
+    <div class="hdr-in">
+        <a href="#" class="logo">
+            <svg width="38" height="38" viewBox="0 0 38 38" fill="none">
+                <rect width="38" height="38" rx="8" fill="rgba(200,168,75,.14)"/>
+                <path d="M19 5L31 11V21C31 27.627 25.627 33 19 33C12.373 33 7 27.627 7 21V11L19 5Z" stroke="#C8A84B" stroke-width="1.5" fill="none"/>
+                <path d="M14 20.5L17.5 24L24 16.5" stroke="#C8A84B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div>
+                <div class="logo-txt">Гарант Сити</div>
+                <div class="logo-sub">Банковские гарантии</div>
+            </div>
+        </a>
+        <nav class="nav">
+            <a href="#services">Услуги</a>
+            <a href="#process">Как работаем</a>
+            <a href="#why">Почему мы</a>
+            <a href="#faq">FAQ</a>
+            <a href="#contacts">Контакты</a>
+        </nav>
+        <div class="hdr-phones">
+            <a href="tel:+79378407170">+7 937 840-71-70</a>
+            <a href="tel:+79638952535">+7 963 895-25-35</a>
+        </div>
+        <button class="btn-hdr" onclick="scrollTo('apply')">Оставить заявку</button>
+        <button class="burger" id="burger" aria-label="Меню">
+            <span></span><span></span><span></span>
+        </button>
+    </div>
+</header>
+
+<!-- MOBILE MENU -->
+<div class="mob-menu" id="mob-menu">
+    <a href="#services" class="mn">Услуги</a>
+    <a href="#process" class="mn">Как работаем</a>
+    <a href="#why" class="mn">Почему мы</a>
+    <a href="#faq" class="mn">FAQ</a>
+    <a href="#contacts" class="mn">Контакты</a>
+    <div class="mob-phones">
+        <a href="tel:+79378407170">+7 937 840-71-70</a>
+        <a href="tel:+79638952535">+7 963 895-25-35</a>
+    </div>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-glow"></div>
+    <div class="hero-in">
+        <div>
+            <div class="hero-eyebrow">Профессиональное сопровождение</div>
+            <h1>Банковская гарантия <em>под ключ</em> — сопровождаем на всех этапах</h1>
+            <p class="hero-sub">Берём на себя подбор банка, подготовку документов и подачу заявки. Вы получаете гарантию — без лишних хлопот.</p>
+            <div class="hero-ctas">
+                <button class="btn-pri" onclick="scrollTo('apply')">Получить консультацию</button>
+                <button class="btn-out" onclick="scrollTo('services')">Узнать подробнее</button>
+            </div>
+            <div class="hero-phones">
+                <a href="tel:+79378407170">
+                    <div class="ph-ring">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.96a16 16 0 0 0 6.29 6.29l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
+                        </svg>
+                    </div>
+                    +7 937 840-71-70
+                </a>
+                <a href="tel:+79638952535">
+                    <div class="ph-ring">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.96a16 16 0 0 0 6.29 6.29l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
+                        </svg>
+                    </div>
+                    +7 963 895-25-35
+                </a>
+            </div>
+        </div>
+        <div class="hero-card">
+            <h3>Бесплатная консультация</h3>
+            <p>Ответим в течение 15 минут</p>
+            <input type="text" placeholder="Ваше имя" id="h-name">
+            <input type="tel" placeholder="Ваш телефон" id="h-phone">
+            <button class="btn-pri" onclick="heroSubmit()">Отправить заявку</button>
+            <div class="hero-badge">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                </svg>
+                <span>Данные защищены. Без спама.</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SERVICES -->
+<section class="guar" id="services">
+    <div class="wrap">
+        <div class="s-head">
+            <div class="s-label">Виды гарантий</div>
+            <h2>Все виды банковских гарантий</h2>
+            <p class="s-desc">Подберём оптимальный вариант под вашу ситуацию и тип контракта</p>
+        </div>
+        <div class="guar-grid">
+            <div class="g-card fu">
+                <div class="g-ico">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/>
+                    </svg>
+                </div>
+                <h3>Обеспечение заявки</h3>
+                <p>Для участия в тендере — подтверждает серьёзность намерений участника перед заказчиком</p>
+                <span class="g-badge">Тендер</span>
+            </div>
+            <div class="g-card fu">
+                <div class="g-ico">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>
+                    </svg>
+                </div>
+                <h3>На исполнение контракта</h3>
+                <p>Защищает заказчика от нарушения обязательств со стороны исполнителя</p>
+                <span class="g-badge">Контракт</span>
+            </div>
+            <div class="g-card fu">
+                <div class="g-ico">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                    </svg>
+                </div>
+                <h3>На возврат аванса</h3>
+                <p>Гарантирует возврат авансового платежа при невыполнении условий договора</p>
+                <span class="g-badge">Аванс</span>
+            </div>
+            <div class="g-card fu">
+                <div class="g-ico">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                </div>
+                <h3>На гарантийный период</h3>
+                <p>Обеспечивает исполнение гарантийных обязательств после завершения работ</p>
+                <span class="g-badge">Гарантия</span>
+            </div>
+            <div class="g-card fu">
+                <div class="g-ico">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
+                    </svg>
+                </div>
+                <h3>По 44-ФЗ</h3>
+                <p>Для государственных закупок в рамках Федерального закона № 44-ФЗ</p>
+                <span class="g-badge">44-ФЗ</span>
+            </div>
+            <div class="g-card fu">
+                <div class="g-ico">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                    </svg>
+                </div>
+                <h3>По 223-ФЗ</h3>
+                <p>Для закупок государственных компаний и корпораций по ФЗ № 223</p>
+                <span class="g-badge">223-ФЗ</span>
+            </div>
+            <div class="g-card fu">
+                <div class="g-ico">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+                    </svg>
+                </div>
+                <h3>По 615-ПП</h3>
+                <p>Для строительных и ремонтных подрядов в рамках Постановления Правительства № 615</p>
+                <span class="g-badge">615-ПП</span>
+            </div>
+            <div class="g-card fu">
+                <div class="g-ico">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/>
+                    </svg>
+                </div>
+                <h3>Коммерческие гарантии</h3>
+                <p>Для частных сделок и договоров между коммерческими организациями</p>
+                <span class="g-badge">Коммерция</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- PROCESS -->
+<section class="proc" id="process">
+    <div class="wrap">
+        <div class="s-head" style="text-align:center">
+            <div class="s-label" style="justify-content:center">Как мы работаем</div>
+            <h2>Четыре шага к гарантии</h2>
+            <p class="s-desc" style="margin:0 auto">Прозрачный процесс — вы знаете, что происходит на каждом этапе</p>
+        </div>
+        <div class="steps">
+            <div class="step fu">
+                <div class="step-n">1</div>
+                <div>
+                    <h3>Заявка и консультация</h3>
+                    <p>Оставляете заявку, мы связываемся и разбираем вашу ситуацию: вид гарантии, сумма, сроки</p>
+                </div>
+            </div>
+            <div class="step fu">
+                <div class="step-n">2</div>
+                <div>
+                    <h3>Сбор документов</h3>
+                    <p>Помогаем собрать полный пакет документов, проверяем на соответствие требованиям банка</p>
+                </div>
+            </div>
+            <div class="step fu">
+                <div class="step-n">3</div>
+                <div>
+                    <h3>Подбор банка и подача</h3>
+                    <p>Выбираем оптимальный банк по условиям и срокам, формируем и подаём заявку</p>
+                </div>
+            </div>
+            <div class="step fu">
+                <div class="step-n">4</div>
+                <div>
+                    <h3>Получение гарантии</h3>
+                    <p>Контролируем выдачу, передаём готовую гарантию. Задача выполнена!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- WHY -->
+<section class="why" id="why">
+    <div class="wrap">
+        <div class="s-head">
+            <div class="s-label">Наши преимущества</div>
+            <h2 style="color:var(--white)">Почему выбирают нас</h2>
+            <p class="s-desc" style="color:rgba(255,255,255,.48)">Работаем так, чтобы вы получили гарантию быстро и без отказов</p>
+        </div>
+        <div class="why-grid">
+            <div class="why-item fu">
+                <div class="why-ico">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 21h18M3 10h18M3 7l9-4 9 4M4 10v11M20 10v11M8 10v11M16 10v11M12 10v11"/>
+                    </svg>
+                </div>
+                <h3>Проверенные банки</h3>
+                <p>Работаем только с аккредитованными банками из реестра Министерства финансов РФ. Ваша гарантия будет принята заказчиком без вопросов.</p>
+            </div>
+            <div class="why-item fu">
+                <div class="why-ico">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/>
+                    </svg>
+                </div>
+                <h3>Помощь с документами</h3>
+                <p>Полностью берём на себя сбор, подготовку и проверку пакета документов. Снижаем риск отказа из-за некомплекта или ошибок.</p>
+            </div>
+            <div class="why-item fu">
+                <div class="why-ico">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                    </svg>
+                </div>
+                <h3>Сопровождение до конца</h3>
+                <p>Ведём сделку от первого звонка до получения готовой гарантии. Вы не остаётесь один на один с банком на любом этапе.</p>
+            </div>
+            <div class="why-item fu">
+                <div class="why-ico">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                    </svg>
+                </div>
+                <h3>Бесплатная консультация</h3>
+                <p>Первичная консультация бесплатна. Разберём вашу ситуацию, ответим на вопросы, подберём оптимальный вариант гарантии.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- WHO -->
+<section class="who" id="who">
+    <div class="wrap">
+        <div class="s-head">
+            <div class="s-label">Целевая аудитория</div>
+            <h2>Кому подходят наши услуги</h2>
+            <p class="s-desc">Помогаем бизнесу любого масштаба, участвующему в закупках и тендерах</p>
+        </div>
+        <div class="who-grid">
+            <div class="who-card fu">
+                <div class="who-ico">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                </div>
+                <div>
+                    <h3>Участники госзакупок</h3>
+                    <p>Компании и ИП, участвующие в торгах на электронных торговых площадках — ЕТС, Сбербанк-АСТ, Росэлторг и других</p>
+                </div>
+            </div>
+            <div class="who-card fu">
+                <div class="who-ico">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
+                    </svg>
+                </div>
+                <div>
+                    <h3>Подрядчики по 44/223-ФЗ</h3>
+                    <p>Организации, заключающие государственные контракты и нуждающиеся в обеспечении по требованию закона</p>
+                </div>
+            </div>
+            <div class="who-card fu">
+                <div class="who-ico">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                    </svg>
+                </div>
+                <div>
+                    <h3>Поставщики товаров</h3>
+                    <p>Компании, поставляющие продукцию по госконтрактам и коммерческим договорам с требованием гарантии</p>
+                </div>
+            </div>
+            <div class="who-card fu">
+                <div class="who-ico">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M2 20h20M4 20V9l8-7 8 7v11M10 20v-5h4v5"/>
+                    </svg>
+                </div>
+                <div>
+                    <h3>Строительные компании</h3>
+                    <p>Подрядчики и субподрядчики в сфере строительства и ремонта, работающие по ПП № 615</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-sec" id="faq">
+    <div class="wrap">
+        <div class="s-head" style="text-align:center">
+            <div class="s-label" style="justify-content:center">Частые вопросы</div>
+            <h2>Вопросы и ответы</h2>
+        </div>
+        <div class="faq-wrap">
+            <div class="faq-item">
+                <button class="faq-q">Что такое банковская гарантия?
+                    <div class="faq-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+                </button>
+                <div class="faq-a">Банковская гарантия — письменное обязательство банка (гаранта) выплатить заказчику (бенефициару) определённую сумму, если исполнитель (принципал) не выполнит обязательства по контракту. По сути, это страховка для заказчика, выданная банком.</div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-q">Чем 44-ФЗ отличается от 223-ФЗ?
+                    <div class="faq-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+                </button>
+                <div class="faq-a">44-ФЗ регулирует закупки государственных и муниципальных органов — жёсткие правила, единые процедуры. 223-ФЗ — закупки госкомпаний и корпораций с госучастием: больше гибкости, каждый заказчик разрабатывает своё положение. Требования к гарантии по каждому закону несколько различаются по форме и содержанию.</div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-q">Какие документы нужны для оформления?
+                    <div class="faq-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+                </button>
+                <div class="faq-a">Базовый пакет: учредительные документы (устав, решение о создании), выписка из ЕГРЮЛ/ЕГРИП, паспорт руководителя, бухгалтерская отчётность за последние периоды, сведения о контракте (номер, сумма, сроки). Конкретный перечень зависит от банка и суммы гарантии — мы помогаем собрать всё необходимое.</div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-q">Сколько времени занимает оформление?
+                    <div class="faq-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+                </button>
+                <div class="faq-a">Стандартный срок — от 1 до 5 рабочих дней с момента подачи полного пакета документов. При срочной потребности возможно оформление за 1 рабочий день. Сроки зависят от суммы гарантии, выбранного банка и полноты предоставленных документов.</div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-q">Как проверить подлинность банковской гарантии?
+                    <div class="faq-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+                </button>
+                <div class="faq-a">Гарантии по 44-ФЗ размещаются в Реестре банковских гарантий на сайте ЕИС (zakupki.gov.ru) — проверить можно по номеру. Для гарантий по 223-ФЗ и коммерческих — запрос непосредственно в банк-гарант. Мы работаем только с проверенными банками и выдаём подлинные гарантии.</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FORM -->
+<section class="form-sec" id="apply">
+    <div class="wrap">
+        <div class="s-label">Заявка</div>
+        <h2 style="color:var(--white)">Оставьте заявку — ответим за 15 минут</h2>
+        <p class="s-desc" style="color:rgba(255,255,255,.48)">Опишите вашу задачу, и мы подберём оптимальный вариант гарантии</p>
+        <div class="form-box">
+            <div id="main-form">
+                <div class="f-row">
+                    <div class="f-grp"><label>Ваше имя</label><input type="text" placeholder="Иван Иванов" id="f-name"></div>
+                    <div class="f-grp"><label>Телефон</label><input type="tel" placeholder="+7 ___ ___-__-__" id="f-phone"></div>
+                </div>
+                <div class="f-grp"><label>Email</label><input type="email" placeholder="ivan@company.ru" id="f-email"></div>
+                <div class="f-grp"><label>Комментарий</label><textarea placeholder="Вид гарантии, сумма, сроки…" id="f-comment"></textarea></div>
+                <div class="f-chk">
+                    <input type="checkbox" id="f-agree">
+                    <label for="f-agree">Я даю согласие на <a href="#">обработку персональных данных</a> в соответствии с Федеральным законом № 152-ФЗ</label>
+                </div>
+                <button class="btn-pri" style="width:100%;padding:15px" onclick="mainSubmit()">Отправить заявку</button>
+            </div>
+            <div class="form-ok" id="form-ok">
+                <div class="form-ok-ico">
+                    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                </div>
+                <h3>Заявка отправлена!</h3>
+                <p>Мы свяжемся с вами в течение 15 минут в рабочее время</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CONTACTS -->
+<section class="contacts-sec" id="contacts">
+    <div class="wrap">
+        <div class="contacts-in">
+            <div class="c-col">
+                <div class="foot-logo">
+                    <svg width="36" height="36" viewBox="0 0 38 38" fill="none">
+                        <rect width="38" height="38" rx="8" fill="rgba(200,168,75,.12)"/>
+                        <path d="M19 5L31 11V21C31 27.627 25.627 33 19 33C12.373 33 7 27.627 7 21V11L19 5Z" stroke="#C8A84B" stroke-width="1.5" fill="none"/>
+                        <path d="M14 20.5L17.5 24L24 16.5" stroke="#C8A84B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <div>
+                        <div class="logo-txt" style="font-family:'Playfair Display',Georgia,serif;font-size:19px;font-weight:700;color:#fff;line-height:1.15">Гарант Сити</div>
+                        <div class="logo-sub" style="font-size:10px;color:var(--gold);font-weight:600;letter-spacing:.09em;text-transform:uppercase">Банковские гарантии</div>
+                    </div>
+                </div>
+                <p class="foot-tag">Профессиональное сопровождение при получении банковской гарантии. Работаем по всей России.</p>
+            </div>
+            <div class="c-col">
+                <h4>Телефоны</h4>
+                <div class="c-item">
+                    <div class="c-ico">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.96a16 16 0 0 0 6.29 6.29l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
+                        </svg>
+                    </div>
+                    <a href="tel:+79378407170">+7 937 840-71-70</a>
+                </div>
+                <div class="c-item">
+                    <div class="c-ico">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.96a16 16 0 0 0 6.29 6.29l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
+                        </svg>
+                    </div>
+                    <a href="tel:+79638952535">+7 963 895-25-35</a>
+                </div>
+            </div>
+            <div class="c-col">
+                <h4>Email</h4>
+                <div class="c-item">
+                    <div class="c-ico">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
+                        </svg>
+                    </div>
+                    <a href="mailto:garant.siti@mail.ru" class="sm">garant.siti@mail.ru</a>
+                </div>
+                <div class="c-item">
+                    <div class="c-ico">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
+                        </svg>
+                    </div>
+                    <a href="mailto:f_kristi@garantsiti.ru" class="sm">f_kristi@garantsiti.ru</a>
+                </div>
+            </div>
+        </div>
+        <div class="foot-btm">
+            <p>© 2026 Гарант Сити. Все права защищены.</p>
+            <a href="#">Политика конфиденциальности</a>
+        </div>
+    </div>
+</section>
+
+<script>
+    // sticky header
+    const hdr = document.getElementById('hdr');
+    addEventListener('scroll', () => hdr.classList.toggle('scrolled', scrollY > 20));
+
+    // hamburger
+    const burger = document.getElementById('burger');
+    const mob = document.getElementById('mob-menu');
+    burger.addEventListener('click', () => {
+        burger.classList.toggle('on');
+        mob.classList.toggle('on');
+    });
+    document.querySelectorAll('.mn').forEach(a => a.addEventListener('click', () => {
+        burger.classList.remove('on');
+        mob.classList.remove('on');
+    }));
+
+    // smooth scroll helper
+    function scrollTo(id) {
+        document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // FAQ accordion
+    document.querySelectorAll('.faq-q').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const item = btn.parentElement;
+            const open = item.classList.contains('open');
+            document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+            if (!open) item.classList.add('open');
+        });
+    });
+
+    // IntersectionObserver fade-up
+    const obs = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fu').forEach(el => obs.observe(el));
+
+    // hero mini-form
+    function heroSubmit() {
+        const n = document.getElementById('h-name').value.trim();
+        const p = document.getElementById('h-phone').value.trim();
+        if (!n || !p) { alert('Пожалуйста, заполните имя и телефон'); return; }
+        alert('Спасибо, ' + n + '! Свяжемся с вами в течение 15 минут.');
+        document.getElementById('h-name').value = '';
+        document.getElementById('h-phone').value = '';
+    }
+
+    // main form
+    function mainSubmit() {
+        const n = document.getElementById('f-name').value.trim();
+        const p = document.getElementById('f-phone').value.trim();
+        const a = document.getElementById('f-agree').checked;
+        if (!n || !p) { alert('Пожалуйста, заполните имя и телефон'); return; }
+        if (!a) { alert('Необходимо дать согласие на обработку персональных данных'); return; }
+        document.getElementById('main-form').style.display = 'none';
+        document.getElementById('form-ok').style.display = 'block';
+    }
+</script>
+</body>
+</html>
