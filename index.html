@@ -1105,6 +1105,7 @@
         var n = document.getElementById('h-name').value.trim();
         var p = document.getElementById('h-phone').value.trim();
         if (!n || !p) { alert('Пожалуйста, заполните имя и телефон'); return; }
+        if (typeof ym === 'function') ym(109801998, 'reachGoal', 'form_submit');
         alert('Спасибо, ' + n + '! Свяжемся с вами в течение 15 минут.');
         document.getElementById('h-name').value = '';
         document.getElementById('h-phone').value = '';
@@ -1117,6 +1118,7 @@
         var a = document.getElementById('f-agree').checked;
         if (!n || !p) { alert('Пожалуйста, заполните имя и телефон'); return; }
         if (!a) { alert('Необходимо дать согласие на обработку персональных данных'); return; }
+        if (typeof ym === 'function') ym(109801998, 'reachGoal', 'form_submit');
         document.getElementById('main-form').style.display = 'none';
         document.getElementById('form-ok').style.display = 'block';
     }
