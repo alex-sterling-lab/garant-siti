@@ -1077,9 +1077,19 @@
     window.modalSubmit = function() {
         var n = document.getElementById('m-name').value.trim();
         var p = document.getElementById('m-phone').value.trim();
+        var e = document.getElementById('m-email').value.trim();
         var a = document.getElementById('m-agree').checked;
         if (!n || !p) { alert('Пожалуйста, заполните имя и телефон'); return; }
         if (!a) { alert('Необходимо дать согласие на обработку персональных данных'); return; }
+        if (typeof ym === 'function') ym(109801998, 'reachGoal', 'form_submit');
+        tgSend(
+            '<b>🔔 Новая заявка — Гарант Сити</b>\n' +
+            '<b>Форма:</b> Модалка («Оставить заявку» в шапке)\n' +
+            '<b>Имя:</b> ' + tgEsc(n) + '\n' +
+            '<b>Телефон:</b> ' + tgEsc(p) + '\n' +
+            '<b>Email:</b> ' + (e ? tgEsc(e) : '—') + '\n' +
+            '<i>' + tgEsc(location.href) + '</i>'
+        );
         document.getElementById('modal-form').style.display = 'none';
         document.getElementById('modal-ok').style.display = 'block';
     };
