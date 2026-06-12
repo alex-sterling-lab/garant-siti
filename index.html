@@ -1111,26 +1111,27 @@
         return fetch('https://api.telegram.org/bot' + TG_TOKEN + '/sendMessage', {
             method: 'POST',
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-            body: body
+            body: body,
+            keepalive: true
         }).catch(function(e) { console.error('TG send failed:', e); });
     }
 
     // hero mini-form
-    window.heroSubmit = function() {
+    window.heroSubmit = async function() {
         var n = document.getElementById('h-name').value.trim();
         var p = document.getElementById('h-phone').value.trim();
         if (!n || !p) { alert('Пожалуйста, заполните имя и телефон'); return; }
         if (typeof ym === 'function') ym(109801998, 'reachGoal', 'form_submit');
-        tgSend(
+        await tgSend(
             '<b>🔔 Новая заявка — Гарант Сити</b>\n' +
             '<b>Форма:</b> Hero (быстрая консультация)\n' +
             '<b>Имя:</b> ' + tgEsc(n) + '\n' +
             '<b>Телефон:</b> ' + tgEsc(p) + '\n' +
             '<i>' + tgEsc(location.href) + '</i>'
         );
-        alert('Спасибо, ' + n + '! Свяжемся с вами в течение 15 минут.');
         document.getElementById('h-name').value = '';
         document.getElementById('h-phone').value = '';
+        alert('Спасибо, ' + n + '! Свяжемся с вами в течение 15 минут.');
     };
 
     // main form
