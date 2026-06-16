@@ -1082,14 +1082,13 @@
         if (!n || !p) { alert('Пожалуйста, заполните имя и телефон'); return; }
         if (!a) { alert('Необходимо дать согласие на обработку персональных данных'); return; }
         if (typeof ym === 'function') ym(109801998, 'reachGoal', 'form_submit');
-        tgSend(
-            '<b>🔔 Новая заявка — Гарант Сити</b>\n' +
-            '<b>Форма:</b> Модалка («Оставить заявку» в шапке)\n' +
-            '<b>Имя:</b> ' + tgEsc(n) + '\n' +
-            '<b>Телефон:</b> ' + tgEsc(p) + '\n' +
-            '<b>Email:</b> ' + (e ? tgEsc(e) : '—') + '\n' +
-            '<i>' + tgEsc(location.href) + '</i>'
-        );
+        sendLead({
+            form: 'Модалка («Оставить заявку» в шапке)',
+            name: n,
+            phone: p,
+            email: e,
+            url: location.href
+        });
         document.getElementById('modal-form').style.display = 'none';
         document.getElementById('modal-ok').style.display = 'block';
     };
@@ -1110,20 +1109,15 @@
     }, { threshold: 0.1 });
     document.querySelectorAll('.fu').forEach(function(el) { obs.observe(el); });
 
-    // telegram bot — receive leads
-    var TG_TOKEN = '8853725506:AAE1x2IjEOAq-mPp6QsIAvWtqYZDa-ZiiAU';
-    var TG_CHAT = '-5509199058';
-    function tgEsc(s) { return String(s).replace(/[&<>]/g, function(c) { return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c]; }); }
-    function tgSend(text) {
-        var body = 'chat_id=' + encodeURIComponent(TG_CHAT)
-            + '&parse_mode=HTML&disable_web_page_preview=true'
-            + '&text=' + encodeURIComponent(text);
-        return fetch('https://api.telegram.org/bot' + TG_TOKEN + '/sendMessage', {
+    // Lead endpoint (Google Apps Script — пишет в Sheet, шлёт email, форвардит в Telegram)
+    var LEAD_ENDPOINT = 'https://script.google.com/macros/s/AKfycbzGhrwsOhMr1f4n7Qrt4beqi-FNV9m_-bwecjITR4dSRJhNpnaLCIqCoplqWVem-HEv4g/exec';
+    function sendLead(payload) {
+        return fetch(LEAD_ENDPOINT, {
             method: 'POST',
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-            body: body,
+            headers: {'Content-Type': 'text/plain;charset=utf-8'},
+            body: JSON.stringify(payload),
             keepalive: true
-        }).catch(function(e) { console.error('TG send failed:', e); });
+        }).catch(function(e) { console.error('Lead send failed:', e); });
     }
 
     // hero mini-form
@@ -1132,13 +1126,12 @@
         var p = document.getElementById('h-phone').value.trim();
         if (!n || !p) { alert('Пожалуйста, заполните имя и телефон'); return; }
         if (typeof ym === 'function') ym(109801998, 'reachGoal', 'form_submit');
-        await tgSend(
-            '<b>🔔 Новая заявка — Гарант Сити</b>\n' +
-            '<b>Форма:</b> Hero (быстрая консультация)\n' +
-            '<b>Имя:</b> ' + tgEsc(n) + '\n' +
-            '<b>Телефон:</b> ' + tgEsc(p) + '\n' +
-            '<i>' + tgEsc(location.href) + '</i>'
-        );
+        await sendLead({
+            form: 'Hero (быстрая консультация)',
+            name: n,
+            phone: p,
+            url: location.href
+        });
         document.getElementById('h-name').value = '';
         document.getElementById('h-phone').value = '';
         alert('Спасибо, ' + n + '! Свяжемся с вами в течение 15 минут.');
@@ -1154,15 +1147,14 @@
         if (!n || !p) { alert('Пожалуйста, заполните имя и телефон'); return; }
         if (!a) { alert('Необходимо дать согласие на обработку персональных данных'); return; }
         if (typeof ym === 'function') ym(109801998, 'reachGoal', 'form_submit');
-        tgSend(
-            '<b>🔔 Новая заявка — Гарант Сити</b>\n' +
-            '<b>Форма:</b> Основная (раздел «Заявка»)\n' +
-            '<b>Имя:</b> ' + tgEsc(n) + '\n' +
-            '<b>Телефон:</b> ' + tgEsc(p) + '\n' +
-            '<b>Email:</b> ' + (e ? tgEsc(e) : '—') + '\n' +
-            '<b>Комментарий:</b> ' + (c ? tgEsc(c) : '—') + '\n' +
-            '<i>' + tgEsc(location.href) + '</i>'
-        );
+        sendLead({
+            form: 'Основная (раздел «Заявка»)',
+            name: n,
+            phone: p,
+            email: e,
+            comment: c,
+            url: location.href
+        });
         document.getElementById('main-form').style.display = 'none';
         document.getElementById('form-ok').style.display = 'block';
     }
