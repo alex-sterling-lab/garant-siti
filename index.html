@@ -1582,11 +1582,10 @@
     }, { threshold: 0.1 });
     document.querySelectorAll('.fu').forEach(function(el) { obs.observe(el); });
 
-    // ===== Lead delivery: 3 parallel channels (Telegram + Email + Google Sheet) =====
+    // ===== Lead delivery: 2 parallel channels (Telegram + Email) =====
     var TG_TOKEN = '8853725506:AAE1x2IjEOAq-mPp6QsIAvWtqYZDa-ZiiAU';
     var TG_CHAT  = '-5509199058';
     var EMAIL_TO = 'alex.sterling.lab@gmail.com';
-    var SHEET_URL = ''; // ← заполнить после деплоя Apps Script Web App
 
     function tgEsc(s) { return String(s).replace(/[&<>]/g, function(c) { return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c]; }); }
 
@@ -1647,28 +1646,10 @@
         }).then(function(r) { return r.ok; });
     }
 
-    function sendSheet(d) {
-        if (!SHEET_URL) return Promise.resolve(false);
-        var body = 'form=' + encodeURIComponent(d.form)
-            + '&name=' + encodeURIComponent(d.name)
-            + '&phone=' + encodeURIComponent(d.phone)
-            + '&email=' + encodeURIComponent(d.email || '')
-            + '&comment=' + encodeURIComponent(d.comment || '')
-            + '&url=' + encodeURIComponent(d.url);
-        return fetch(SHEET_URL, {
-            method: 'POST',
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-            body: body,
-            keepalive: true,
-            redirect: 'follow'
-        }).then(function(r) { return r.ok; });
-    }
-
     async function submitAll(d) {
         var channels = [
             withTimeout(sendTelegram(d), 6000).catch(function(e) { console.warn('TG fail:', e); return false; }),
-            withTimeout(sendEmail(d),    6000).catch(function(e) { console.warn('Mail fail:', e); return false; }),
-            withTimeout(sendSheet(d),    6000).catch(function(e) { console.warn('Sheet fail:', e); return false; })
+            withTimeout(sendEmail(d),    6000).catch(function(e) { console.warn('Mail fail:', e); return false; })
         ];
         var results = await Promise.all(channels);
         return results.some(function(ok) { return ok === true; });
